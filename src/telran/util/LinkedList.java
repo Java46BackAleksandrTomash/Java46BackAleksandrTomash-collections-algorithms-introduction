@@ -252,17 +252,23 @@ public class LinkedList<T> implements List<T> {
 	 * current - {10, -5, 30} - after reverse - {30, -5. 10}
 	 */
 	public void reverse() {
-		int limit = size / 2 ;
-		Node<T> forwardCurrent = head;
-		Node<T> backwardCurrent = tail;
-		for (int i = 0; i < limit; i++, forwardCurrent = forwardCurrent.next,
-				backwardCurrent = backwardCurrent.prev) {
-			T tmp = forwardCurrent.obj;
-			forwardCurrent.obj = backwardCurrent.obj;
-			backwardCurrent.obj = tmp;
-			
-		}
-		
+		Node<T> current = head;
+		Node<T> tmp = null;
+		reverse(current, tmp);
+		tmp = head;
+		head = tail;
+		tail = tmp;
 	}
 
+	private void reverse(Node<T> current, Node<T> tmp) {
+		if(current != null) {
+			tmp = current.next;
+			current.next = current.prev;
+			current.prev = tmp;
+			//current = current.prev;
+			reverse(current.prev, tmp);
+		}
+	}
 }
+
+
