@@ -3,6 +3,7 @@ package telran.util.tests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
+import java.util.IntSummaryStatistics;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import telran.util.Collection;
+import telran.util.HashSet;
 
 abstract class CollectionTests {
 	protected static final int N_NUMBERS = 10000;
@@ -160,5 +162,32 @@ abstract class CollectionTests {
 		collection = createCollection();
 		assertArrayEquals(new Integer[0], collection.toArray(new Integer[0]));
 	}
+	@Test
+	void cleanTest() {
+		collection.clean();
+		assertEquals(0, collection.size());
+	}
+	@Test
+	void shuffleTest() {
+		int size = collection.size();
+		Integer array[] = collection.toArray(new Integer[0]);
+		Integer arraySh [] = collection.toShuffleArray(new Integer[0]);
+		assertFalse(Arrays.equals(array, arraySh));
+		collection = new HashSet<Integer>();
+		fillCollection(arraySh);
+		assertEquals(size, collection.size());
+	}
+	@Test
+	void streamTest() {
+		assertEquals(93, collection.stream().mapToInt(x -> x).sum());
+		assertArrayEquals(new Integer[] {-5}, collection.stream()
+				.filter(n -> n < 0).toArray(size -> new Integer[size]));
+		
+		IntSummaryStatistics st = collection.stream().mapToInt(x -> x).summaryStatistics();
+		int min = st.getMin();
+		int max = st.getMax();
+		assertEquals(-5, min);
+		assertEquals(40, max);
+		}
 
 }

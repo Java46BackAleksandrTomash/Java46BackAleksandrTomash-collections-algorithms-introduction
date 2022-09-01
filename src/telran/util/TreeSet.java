@@ -367,6 +367,7 @@ public class TreeSet<T> extends AbstractCollection<T> implements SortedSet<T> {
 			return null;
 		}
 		Node<T> node = getNodeOrParent(pattern);
+		
 		int compRes = comp.compare(pattern, node.obj);
 		if (compRes != 0) {
 			node = compRes > 0 ? getGreaterParent(node) : node;
